@@ -1,0 +1,54 @@
+[user]
+Information about environments is given as python dictionary. Example:
+"""
+"environment": {
+    "locations": [
+        "location1",
+        "location2",
+        "location3"
+    ],
+    "object_properties": {
+        "object1": ["FOUND"],
+        "object2": [],
+        "object3": []
+    },
+    "asset_properties": {
+        "asset1": [],
+        "asset2": ["FOUND"]
+    },
+    "hand_properties": {
+        "left": [],
+        "right": []
+    },
+    "asset_object_relations": {
+        "asset1": ["object1", "object2"],
+        "asset2": ["object3"]
+    },
+    "location_asset_relations": {
+        "location1": ["asset2"],
+        "location2": ["asset1"],
+        "location3": []
+    }
+}
+
+"""
+- A key of "locations" denotes the list of locations in the environment. This list is static and never changes.
+- A key of "object_properties" denotes a list of objects in the environment as well as their properties. Properties are necessary to select appropriate actions.
+- A key of "asset_properties" denotes a list of assets in the environment as well as their properties. Properties are necessary to select appropriate actions.
+- A key of "hand_properties" denotes a list including the left and right hand as well as their properties.
+- A key of "asset_object_relations" denotes a list of attached objects to each asset. The list of attached objects may change from a robot's pick up or put action.
+- A key of "location_asset_relations" denotes a list of assets in each location. The list of assets is static.
+Object has the following properties:
+- BEING_GRABBED: If an object has this attribute, it is being held by the robot. Thus, this attribute is dynamic.
+- FOUND: If an object has this attribute, it can be performed an action by the robot. Thus, this attribute is dynamic. 
+- NEAR: If an object has this attribute, it is near the robot. Thus, this attribute is dynamic.
+Asset has the following properties:
+- FOUND: If an object has this attribute, it can be performed an action by the robot. Thus, this attribute is dynamic. 
+- NEAR: If an object has this attribute, it is near the robot. Thus, this attribute is dynamic.
+Hand has the following properties:
+- HAND_IN_USE: If a hand has this attribute, this hand has grabbed the object. Thus, this attribute is dynamic.
+"""
+-------------------------------------------------------
+The texts above are part of the overall instruction. Do not start working yet:
+[assistant]
+Understood. I will wait for further instructions before starting to work.

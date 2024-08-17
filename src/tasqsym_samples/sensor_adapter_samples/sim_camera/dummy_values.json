@@ -1,0 +1,24 @@
+{
+    "items": {
+        "empty_bottle": {
+            "position": [0.55, 0.0, 0.96],
+            "orientation": [0.0, 0.0, 0.0, 1.0],
+            "frame": "base"
+        },
+        "paper_trash": {
+            "position": [0.55, 0.0, 0.96],
+            "orientation": [0.5, 0.5, -0.5, 0.5],
+            "frame": "base"
+        },
+        "trash_can": {
+            "position": [0.65, 0.0, 0.5],
+            "orientation": [0.0, 0.0, 0.0, 1.0],
+            "frame": "base"
+        },
+        "table": {
+            "position": [0.65, 0.0, 0.9],
+            "orientation": [0.0, 0.0, 0.0, 1.0],
+            "frame": "base"
+        }
+    }
+}

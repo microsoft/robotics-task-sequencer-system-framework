@@ -1,0 +1,182 @@
+[user]
+I will give you some examples of the input and the output you will generate. 
+Example 1:
+"""
+- Input:
+"environment": {
+    "locations": [
+        "kitchen"
+    ],
+    "object_properties" : {
+        "bottle": []
+    },
+    "asset_properties": {
+        "table": [],
+        "trash_can": []
+    },
+    "hand_properties": {
+        "left": [],
+        "right": []
+    },
+    "asset_object_relations": {
+        "table": ["bottle"],
+        "trash_can": []
+    },
+    "location_asset_relations": {
+        "kitchen": ["table", "trash_can"]
+    }
+}
+"instruction": "Throw away the bottle in the kitchen to the trash can"
+- Output:
+```python
+{"task_sequence": [
+        "Prepare()",
+        "MoveToLocation(kitchen)",
+        "Find(bottle, left)",
+        "MoveToObjectOrAsset(bottle)",
+        "Grab(bottle, left)",
+        "PickUp(bottle, table)",
+        "Find(trash_can, left)",
+        "MoveToObjectOrAsset(trash_can)",
+        "Release(bottle)"
+    ],
+    "environment_after": {
+        "object_properties": {
+            "drink": ["NEAR"]
+        },
+        "asset_properties": {
+            "table": [],
+            "trash_can": ["FOUND", "NEAR"]
+        },
+        "hand_properties": {
+            "left": [],
+            "right": []
+        },
+        "asset_object_relations": {
+            "table": [],
+            "trash_can": []
+        }
+    }
+}
+```
+"""
+
+Example 2:
+"""
+- Input:
+"environment": {
+    "locations": [
+        "room"
+    ],
+    "object_properties": {
+        "eraser": []
+    },
+    "asset_properties": {
+        "table": []
+    },
+    "hand_properties": {
+        "left": [],
+        "right": []
+    },
+    "asset_object_relations": {
+        "table": ["eraser"]
+    },
+    "location_asset_relations": {
+        "room": ["table"]
+    }
+}
+"instruction": "Pick up the eraser on the desk using the right hand"
+- Output:
+```python
+{"task_sequence": [
+        "Prepare()",
+        "MoveToLocation(room)",
+        "Find(eraser, right)",
+        "MoveToObjectOrAsset(eraser)",
+        "Grab(eraser, right)",
+        "PickUp(eraser, table)"
+    ],
+    "environment_after": {
+        "object_properties": {
+            "eraser": ["FOUND", "NEAR", "BEING_GRABBED"]
+        },
+        "asset_properties": {
+            "table": []
+        },
+        "hand_properties": {
+            "left": [],
+            "right": ["HAND_IN_USE"]
+        },
+        "asset_object_relations": {
+            "table": []
+        }
+    }
+}
+```
+"""
+
+Example 3:
+"""
+- Input:
+"environment": {
+    "locations": [
+        "room"
+    ],
+    "object_properties": {
+        "cup": []
+    },
+    "asset_properties": {
+        "table": [],
+        "basket": []
+    },
+    "hand_properties": {
+        "left": [],
+        "right": []
+    },
+    "asset_object_relations": {
+        "table": ["cup"],
+        "basket": []
+    },
+    "location_asset_relations": {
+        "room": ["table", "basket"]
+    }
+}
+"instruction": "Move the cup into the basket using the right hand"
+- Output:
+```python
+{"task_sequence": [
+        "Prepare()",
+        "MoveToLocation(room)",
+        "Find(cup, right)",
+        "MoveToObjectOrAsset(cup)",
+        "Grab(cup, right)",
+        "PickUp(cup, table)",
+        "Find(basket, right)",
+        "MoveToObjectOrAsset(basket)",
+        "Put(cup, basket)",
+        "Release(cup)"
+    ],
+    "environment_after": {
+        "object_properties": {
+            "cup": ["NEAR"]
+        },
+        "asset_properties": {
+            "table": [],
+            "basket": ["FOUND", "NEAR"]
+        },
+        "hand_properties": {
+            "left": [],
+            "right": []
+        },
+        "asset_object_relations": {
+            "table": [],
+            "basket": ["cup"]
+        }
+    }
+}
+```
+"""
+-------------------------------------------------------
+The texts above are part of the overall instruction. Do not start working yet:
+[assistant]
+Waiting for next input.

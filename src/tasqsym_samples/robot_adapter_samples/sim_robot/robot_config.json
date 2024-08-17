@@ -1,0 +1,54 @@
+{
+    "robot_structure": {
+        "combiner": "tasqsym_samples.robot_adapter_samples.sim_robot.combiner.SimRobotCombiner",
+        "models": [
+            {
+                "mobile_manipulator": {
+                    "unique_id": "mobile_base_with_arm",
+                    "model_robot": "tasqsym_samples.robot_adapter_samples.sim_robot.include.sim_robot_model.SimRobotModel",
+                    "physical_robot": "tasqsym_samples.robot_adapter_samples.sim_robot.include.sim_robot_controller.SimRobotController",
+                    "parent_link": "map",
+                    "configs": {},
+                    "childs": [
+                        {
+                            "end_effector": {
+                                "unique_id": "gripper",
+                                "model_robot": "tasqsym_samples.robot_adapter_samples.sim_robot.include.sim_gripper_model.SimGripperModel",
+                                "physical_robot": "tasqsym_samples.robot_adapter_samples.sim_robot.include.sim_gripper_controller.SimGripperController",
+                                "parent_link": "wrist_link",
+                                "childs": [],
+                                "configs": {
+                                    "physical_robot": {
+                                        "contact_center_link": "grasp_link"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "sensor": {
+                                "unique_id": "head_camera",
+                                "type": "camera_3d",
+                                "physical_sensor": "tasqsym_samples.sensor_adapter_samples.sim_camera.sim_camera.SimCamera",
+                                "parent_link": "head_link",
+                                "sensor_frame": "camera_optical_frame",
+                                "configs": {
+                                    "dummy_values_file": "./src/tasqsym_samples/sensor_adapter_samples/sim_camera/dummy_values.json"
+                                }
+                            }
+                        },
+                        {
+                            "sensor": {
+                                "unique_id": "force_sensor",
+                                "type": "force_6d",
+                                "physical_sensor": "tasqsym_samples.sensor_adapter_samples.sim_force_sensor.sim_force_sensor.SimForceSensor",
+                                "parent_link": "wrist_link",
+                                "sensor_frame": "wrist_link",
+                                "configs": {}
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

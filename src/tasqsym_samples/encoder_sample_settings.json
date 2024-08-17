@@ -1,0 +1,9 @@
+{
+    "engines": {
+        "data": {
+            "engine": "tasqsym.core.engines.data_engine.DataEngine",
+            "class_id": "",
+            "config": "./src/tasqsym_samples/aimodel_samples/stored_parameters/sample_environment.json"
+        }
+    }
+}

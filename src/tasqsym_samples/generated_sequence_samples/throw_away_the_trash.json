@@ -1,0 +1,155 @@
+{
+    "root": {
+        "BehaviorTree": {
+            "ID": "MainTree",
+            "Tree": [
+                {
+                    "Sequence": [
+                        {
+                            "Node": "PREPARE"
+                        },
+                        {
+                            "Node": "NAVIGATION",
+                            "@destination": [
+                                0.12,
+                                15.4,
+                                0.0
+                            ],
+                            "@frame": "map",
+                            "@orientation": [
+                                0.0,
+                                0.0,
+                                -0.22833,
+                                0.97358
+                            ],
+                            "@context": "move to the dining_area"
+                        },
+                        {
+                            "Node": "FIND",
+                            "@target_description": "paper_trash",
+                            "@context": "find the paper_trash on the right"
+                        },
+                        {
+                            "Node": "LOOK",
+                            "@target": "{find_result}",
+                            "@context": "find the paper_trash on the right"
+                        },
+                        {
+                            "Node": "NAVIGATION",
+                            "@destination": [
+                                -0.55,
+                                0.0,
+                                0.0
+                            ],
+                            "@frame": "{find_result}",
+                            "@context": "move the right hand to a paper_trash using precision grasp"
+                        },
+                        {
+                            "Node": "BRING",
+                            "@destination": [
+                                -0.17,
+                                0.0,
+                                0.0
+                            ],
+                            "@frame": "{find_result}",
+                            "@orientation": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "@context": "move the right hand to a paper_trash using precision grasp"
+                        },
+                        {
+                            "Node": "LOOK",
+                            "@target": "{find_result}",
+                            "@context": "move the right hand to a paper_trash using precision grasp"
+                        },
+                        {
+                            "Node": "GRASP",
+                            "@grasp_type": "precision",
+                            "@hand_laterality": "right",
+                            "@approach_direction": [
+                                0.1,
+                                0.0,
+                                -0.2
+                            ],
+                            "@target": "paper_trash",
+                            "@context": "move the right hand to grasp a paper_trash using precision grasp"
+                        },
+                        {
+                            "Node": "PICK",
+                            "@detach_direction": [
+                                0.0,
+                                0.0,
+                                0.15
+                            ],
+                            "@context": "move the right hand to pick a paper_trash from the table"
+                        },
+                        {
+                            "Node": "BRING",
+                            "@destination": null,
+                            "@context": "move the right hand to self"
+                        },
+                        {
+                            "Node": "NAVIGATION",
+                            "@destination": [
+                                -0.65,
+                                16.13,
+                                0.0
+                            ],
+                            "@frame": "map",
+                            "@orientation": [
+                                0.0,
+                                0.0,
+                                0.66416,
+                                0.74759
+                            ],
+                            "@context": "move to the trash_area"
+                        },
+                        {
+                            "Node": "FIND",
+                            "@target_description": "trash_can",
+                            "@context": "find the trash_can on the right"
+                        },
+                        {
+                            "Node": "LOOK",
+                            "@target": "{find_result}",
+                            "@context": "find the trash_can on the right"
+                        },
+                        {
+                            "Node": "BRING",
+                            "@destination": [
+                                0.0,
+                                0.0,
+                                0.5
+                            ],
+                            "@frame": "{find_result}",
+                            "@orientation": null,
+                            "@context": "move the default hand to a trash_can"
+                        },
+                        {
+                            "Node": "LOOK",
+                            "@target": "{find_result}",
+                            "@context": "move the default hand to a trash_can"
+                        },
+                        {
+                            "Node": "RELEASE",
+                            "@depart_direction": [
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "@context": "release the right from the paper_trash"
+                        },
+                        {
+                            "Node": "BRING",
+                            "@destination": null,
+                            "@context": "move the right hand to self"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "general": {},
+    "library": "tasqsym.library.default_library",
+    "robot_structure": "./src/tasqsym_samples/robot_adapter_samples/sim_robot/robot_config.json",
+    "engines": {
+        "data": null,
+        "kinematics": {
+            "engine": "tasqsym.core.engines.kinematics_engine.KinematicsEngine",
+            "class_id": ""
+        },
+        "controller": {
+            "engine": "tasqsym.core.engines.controller_engine.ControllerEngine",
+            "class_id": ""
+        }
+    }
+}

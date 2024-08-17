@@ -1,0 +1,132 @@
+<!-- Copyright (c) Microsoft Corporation.
+ Licensed under the MIT License. -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <!-- meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" -->
+    <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Chat</title>
+</head>
+
+<body>
+    <h1>Robot GPT User Interface</h1>
+    <!-- Hidden classes. page_loaded, visual_teaching -->
+    <div hidden , id="status" , value="page_loaded"></div>
+    <div hidden , id="previous_status" , value="page_loaded"></div>
+    <div hidden , id="mic_enabled" , value="no"></div>
+    <header>
+    </header>
+    <ul id='messages'>
+        <li class="received"><span style="color:#8034c7">Robot: Please enter instructions.</span></li>
+    </ul>
+    <form action="" onsubmit="send_message(event)" id="form">
+        <input type="text" id="messageText" autocomplete="off" placeholder="Type your message here..."/>
+        <button id="sendform">Send</button>
+    </form>
+
+
+    <div style="margin-bottom: 10px;"></div>
+    <button onclick="sendCancel(event)" id="button_cancel" style="margin-right: 100px;">Cancel instruction</button>
+    <button onclick="sendEStop(event)" id="button_cancel" style="margin-right: 100px;">Emergency stop</button>
+    <script>
+        function generateSessionId() {
+            var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            var sessionId = '';
+            for (var i = 0; i < 16; i++) {
+              sessionId += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return sessionId;
+        }
+        var session_id = generateSessionId();
+        var ws = new WebSocket('ws://localhost:9100/ws/'+session_id);
+        sendform.disabled = false;
+
+        function process_message(event) {
+            console.log('message arrived');
+            console.log(event.data)
+
+            if (event.data.includes("CONSOLE_LOG")) {
+                var messages = document.getElementById('messages');
+                var loader = document.createElement('li');
+                loader.innerHTML = '<div class="loader" style="display: block;"></div>';
+                loader.classList.add("loading-indicator");
+                messages.appendChild(loader);
+                messages.scrollTop = messages.scrollHeight;
+            }
+            else {
+                var loader = document.querySelector('.loading-indicator');
+                if (loader) {
+                    loader.remove();
+                }
+                var args = event.data.split('__args__')[1]
+                console.log(args)
+                if (true) {
+                    var messages = document.getElementById('messages');
+                    var message = document.createElement('li');
+                    var add_message = event.data.split('__args__')[0]
+                    add_message = add_message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    add_message = add_message.replace(/\n/g, '<br>').replace(/    /g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+                    var content = document.createElement("span");
+                    //content.appendChild(document.createTextNode(add_message));
+                    content.innerHTML = add_message;
+                    message.appendChild(content);
+                    if (event.data.startsWith('Robot')) {
+                        message.style.color = '#8034c7';
+                        message.classList.add("received");
+                    } else {  // User
+                        message.style.color = '#000000';
+                        message.classList.add("sent");
+                    }
+                    messages.appendChild(message);
+                    messages.scrollTop = messages.scrollHeight;
+                }
+            }
+        }
+
+        ws.onmessage = process_message;
+
+        const MAX_LENGTH = 1000
+        function send_message(event) {
+            var input = document.getElementById("messageText");
+            if (input.value) {
+                console.log('message valid');
+                if (input.value.length > MAX_LENGTH) {
+                    ws.send(input.value.substr(0, MAX_LENGTH))
+                } else {
+                    console.log(input.value);
+                    ws.send(input.value);
+                }
+            }
+            input.value = ''
+            event.preventDefault();
+        }
+
+        function sendCancel(event) {
+            ws.send('cancel');
+            var input = document.getElementById("messageText");
+            input.value = ''
+            event.preventDefault();
+        }
+
+        function sendEStop(event) {
+            ws.send('e-stop');
+            var input = document.getElementById("messageText");
+            input.value = ''
+            event.preventDefault();
+        }
+
+        function handleButtonClick(event) {
+            const button = event.target;
+            const buttonText = button.textContent;
+            var send_string = buttonText.toLowerCase();
+            ws.send(send_string);
+        }
+
+        console.log('Ready to receive messages');
+    </script>
+</body>
+</html>

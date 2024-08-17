@@ -1,0 +1,38 @@
+[user]
+Necessary and sufficient robot actions are defined as follows:
+"""
+"ROBOT ACTION LIST"
+Find(arg1, arg2): Find the object or asset specified by arg1 located on the side specified in arg2. arg2 is either left or right with the right being default and should match the hand used by the Grab action or the hand in use.
+Preconditions: Arg1 is in not yet found (i.e., not FOUND).
+Postconditions: Arg1 is found (i.e., FOUND)
+
+Grab(arg1, arg2): Take hold of the object specified by arg1 using the hand specified in arg2. arg2 is either left or right with the right being default.
+Preconditions: Arg1 is found and arg1 is near the robot (i.e., FOUND and NEAR). No object is held (i.e., not BEING_GRABBED). No hands are in use (i.e., not HAND_IN_USE).
+Postconditions: Arg1 is held (i.e., BEING_GRABBED). Arg2 is in use (i.e., HAND_IN_USE).
+
+MoveToLocation(arg1): Move the robot from the current location to the location specified by arg1.
+Postconditions: All objects except the one grabbed (i.e., BEING_GRABBED) are no longer near and found by the robot (i.e., not NEAR and not FOUND).
+
+MoveToObjectOrAsset(arg1): Move the robot near the object or asset specified by arg1.
+Preconditions: Arg1 is found (i.e., FOUND) but arg1 is not near the robot (i.e., not NEAR).
+Postconditions: Arg1 is near the robot (i.e., NEAR).
+
+Release(arg1): Release the object specified in arg1.
+Preconditions: Arg1 is being held (i.e., BEING_GRABBED).
+Postconditions: Arg1 is released (i.e., not BEING_GRABBED) and arg1 is no longer found by the robot (i.e., not FOUND). The hand used for the Grab action becomes not in use (i.e., not HAND_IN_USE).
+
+PickUp(arg1, arg2): Lift the object specified in arg1 from the object or asset specified in arg2.
+Preconditions: Arg1 is being held (i.e., BEING_GRABBED). Arg2 does not need to be found. Arg1 is attached to arg2.
+Postconditions: Arg1 is being held (i.e., BEING_GRABBED). Arg1 is no longer attached to arg2.
+
+Put(arg1, arg2): Place the object specified in arg1 on an object or asset specified in arg2.
+Preconditions: Arg1 is being held (i.e., BEING_GRABBED). Arg2 is found and near the robot (i.e., FOUND and NEAR). Arg1 is not attached to arg2.
+Postconditions: Arg1 is being held (i.e., BEING_GRABBED). Arg1 is attached to arg2.
+
+Prepare(): Prepare the robot.
+Preconditions: No objects are held (i.e., not BEING_GRABBED). No actions prior to this action.
+"""
+-------------------------------------------------------
+The texts above are part of the overall instruction. Do not start working yet:
+[assistant]
+Waiting for next input.

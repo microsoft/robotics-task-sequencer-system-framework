@@ -1,0 +1,47 @@
+{
+    "semantic_map_locations": {
+        "dining_area": {"position": [0.12, 15.40, 0.0], "orientation": [0.0, 0.0, -0.22833, 0.97358]},
+        "trash_area":  {"position": [-0.65, 16.13, 0.0], "orientation": [0.0, 0.0, 0.66416, 0.74759]}
+    },
+    "objects_metadata": {
+        "empty_bottle": {
+            "default situation": {
+                "grasp_type": "power", "hand_laterality": "right",
+                "approach_direction": [1.0, 0.0, 0.0], "depart_direction": [-1.0, 0.0, 0.0],
+                "nav_position": [-0.55, 0.0, 0.0],
+                "bring_frame": "{find_result}", "bring_position": [-0.17, 0.0, 0.0], "bring_orientation": [0.0, 0.0, 0.0, 1.0]
+            }
+        },
+        "paper_trash": {
+            "default situation": {
+                "grasp_type": "precision", "hand_laterality": "right",
+                "approach_direction": [0.1, 0.0, -0.2], "depart_direction": [0.0, 0.0, 1.0],
+                "nav_position": [0.0, -0.55, 0.0],
+                "bring_frame": "{find_result}", "bring_position": [-0.17, 0.0, 0.0], "bring_orientation": [0.0, 0.0, 0.0, 1.0]
+            }
+        }
+    },
+    "assets_metadata": {
+        "table": {
+            "default situation": {
+                "detach_direction": [0.0, 0.0, 0.15], "attach_direction": [0.0, 0.0, -0.08],
+                "nav_position": null,
+                "bring_frame": "{find_result}", "bring_position": [0.0, 0.0, 0.15], "bring_orientation": [0.0, 0.0, 0.0, 1.0]
+            }
+        },
+        "trash_can": {
+            "default situation": {
+                "nav_position": null,
+                "bring_frame": "{find_result}", "bring_position": [0.0, 0.0, 0.5], "bring_orientation": null
+            }
+        }
+    },
+    "asset_object_relations": {
+        "table":     ["empty_bottle", "paper_trash"],
+        "trash_can": []
+    },
+    "location_asset_relations": {
+        "dining_area": ["table"],
+        "trash_area":  ["trash_can"]
+    }
+}

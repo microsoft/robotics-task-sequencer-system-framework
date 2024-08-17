@@ -1,0 +1,18 @@
+Start working. Resume from the environment below.
+"""
+{"environment":[ENVIRONMENT]}
+"""
+The instruction is as follows:
+"""
+{"instruction": [INSTRUCTION]}
+"""
+The dictionary that you return must be formatted as a Python dictionary. Follow these rules:
+1. DO NOT USE undefined verbs. USE ONLY verbs in "ROBOT ACTION LIST".
+2. The arguments of the ROBOT ACTIONs must be selected from the objects in the environment.
+3. You must output a valid Python dictionary. Never leave ',' at the end of the list.
+4. Insert "```python" at the beginning and the insert "```" at end of the dictionary to separate it from the rest of your response. That is, your response must be formatted as follows:
+```python
+{... your response, which must be a valid Python dictionary...}
+```
+"""
+Adhere to the output format I defined above. Note that the input text is not case sensitive. Follow the four rules. Think step by step.
