@@ -1,0 +1,8 @@
+numpy==2.0.1
+paho-mqtt==2.1.0
+python-dotenv==1.0.1
+fastapi==0.112.0
+tiktoken==0.7.0
+openai==1.39.0
+uvicorn[standard]
+jinja2==3.1.4
