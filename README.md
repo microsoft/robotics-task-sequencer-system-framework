@@ -4,56 +4,62 @@ The Robotics Task-sequencer System Framework enables developers to achieve more 
 
 The framework enables generating a sequence of robot actions (a behavior tree) from text input by a human operator using Azure OpenAI, and then connecting those actions to the robot controller. The framework is designed to adapt to different hardware of different forms including but not limited to dual-arm robots, dexterous hands, industrial manipulators, and mobile robots.
 
+![framework overview](./docs/img/robotics_task_sequencer_system_framework.png)
+
+The above figure illustrates the overview of the framework. Dotted arrows indicate data flow while solid arrows indicate component loading. Components in a dotted blue outline may indicate dependency on an external service. Components in an orange outline or coloring may require implementation/replacement depending on the usage scenario.
+
 ## FAQ
+
+Please note that the term "user(s)" below refers to the developers, engineers, etc. who will be directly using this repository and does not refer to the end-users.
 
 <details>
 <summary> What is/are the Task-sequencer System Framework’s intended use(s)? </summary>
-The framework should be used to develop robot systems which turn human language into actions for robots. The repository containing the framework includes a sample code on how to adapt this framework, however, it is up to the developers to implement the actual system and hardware integration to operate for their purpose.
+The framework should be used to develop robot systems which turn human language into actions for robots. The repository containing the framework includes a sample code on how to adapt this framework, however, it is up to the users to implement the actual system and hardware integration to operate for their purpose.
 </details> 
-&nbsp;
+
 <details>
 <summary> How was Task-sequencer System Framework evaluated? </summary>
 The framework has been tested with several robots ranging from a humanoid to a four-legged robot. Instructions have been tested on a range of scenarios including daily chores, inspection, and assembly. These varying hardware and scenarios were used to test the applicability of the framework. Please note that the tested scenarios are not part of the repository, however, a user could apply the framework to such scenarios by customizing the prompts, skills, and hardware connections.
 </details> 
-&nbsp;
+
 <details>
 <summary> What are the limitations of the Task-sequencer System Framework? How can users minimize the impact of the limitations when using the framework? </summary>
-The framework is not designed to be used as-is for a robotics operation. Users must provide the appropriate prompts, skills, and hardware connections. The repository provides example prompts for a daily chore scenario with a default skill set including find, look, grasp, pick, bring, place, release, and navigation. While this sample prompt and default skill sets may be used as-is for some use cases, users should build upon the samples and not rely on the sample implementations as if it is something reliable for a robotics operation.
+The framework is not designed to be used as-is for a robotics operation. Users must provide the appropriate prompts, skills, and hardware connections. The repository provides example prompts for a daily chore scenario with a default skill set including find, look, grasp, pick, bring, place, release, and navigation. While this sample prompt and default skill set may be used as-is for some use cases, users should build upon the samples and not rely on the sample implementations as if it is something reliable for a robotics operation.
 </details> 
-&nbsp;
+
 <details>
 <summary> Is the Task-sequencer System Framework an end-to-end language-action model? </summary>
 The framework is not an end-to-end language-action model but rather a layered framework to achieve a language-to-action pipeline. Instead of directly outputting low-level motor commands, the language input is converted to a sequence of high-level action commands (tasks) in the behavior tree format. This allows human-in-the-loop where a human operator may examine the generated sequence before low-level commands are sent to the robot.
 </details> 
-&nbsp;
+
 <details>
 <summary> Does the Task-sequencer System Framework ensure safe executions? </summary>
 The framework does not detect whether the generated sequence is safe to perform. It is highly recommended that the user checks and ensures that the generated sequence is safe by examining the generated behavior tree. Users should be prepared to emergency stop the robot if is behaving unexpectedly.
 </details> 
-&nbsp;
+
 <details>
 <summary> What operational factors and settings allow for effective and responsible use of the Task-sequencer System Framework? </summary>
 To increase the reliability of the sequence generation, it is recommended that a user edit the prompts. To achieve the hardware connections, a user with a good understanding about their hardware should implement the connection with extra consideration on the robot’s control speed and preferably use simulators until obtained reliable end-to-end system flows.
 </details> 
-&nbsp;
+
 <details>
 <summary> Does the repository provide examples for real hardware connection? </summary>
 The sample codes do not provide any examples that will connect to a specific  hardware. However, if using a ROS compatible robot, an example for connecting to a ROS controller is provided in the comments of the sim_robot_controller.py sample code.
 </details> 
-&nbsp;
+
 <details>
 <summary> How can custom modules be integrated with the Task-sequencer System Framework? </summary> 
-The framework relies on loading python modules for the prompt-set definitions, skills, and hardware connections. A developer can load their own prompt-set definitions, skills, and hardware adapters by creating their own configuration files and by passing the right arguments when running the server.py and core.py (please see the Developing section for further details). It is highly recommended that users package their own modules and configurations in a separate repository/folder and avoid mixing their code with the code provided from this repository.
+The framework relies on loading python modules for the prompt-set definitions, skills, and hardware connections. A user can load their own prompt-set definitions, skills, and hardware adapters by creating their own configuration files and by passing the right arguments when running the server.py and core.py (please see the Developing section for further details). It is highly recommended that users package their own modules and configurations in a separate repository/folder and avoid mixing their code with the code provided from this repository.
 </details> 
-&nbsp;
+
 <details>
 <summary> Are the skills in the default skill set machine-learned / trained using datasets? What are the requirements for using the default skill set? </summary>
 All the skills in the default skill set are engineered (non-trained) and require integrating sensors/controllers in the hardware connection layer to successfully generate a trajectory. While these skills require the hardware adapters to be correctly setup, they do not require additional data collection as they are not trained using data. However, data collection could be a requirement for the controller/sensor module the user decides to integrate (e.g., a sensor hardware integrated with Cognitive Services for object detection, etc.).
 </details> 
-&nbsp;
+
 <details>
 <summary> What are the skill parameters and how are they obtained in the system? </summary>
-In the generated behavior tree, skill parameters are indicated using name conventions starting with an "@" mark. For the default skill set, these parameters change the behavior of the trajectory generation. In the sample code and for the default skill set, a fixed value is loaded from an external JSON file. The repository does not provide an automated way of obtaining these parameters and it is recommended that a developer develops the automated procedure for capturing these parameters based on the state of the environment. However, a tool using GPT-4o to automate the skill parameter collection for the default skill sets may be released as a separate repository in the future.
+In the generated behavior tree, skill parameters are indicated using name conventions starting with an "@" mark. For the default skill set, these parameters change the behavior of the trajectory generation. In the sample code and for the default skill set, a fixed value is loaded from an external JSON file. The repository does not provide an automated way of obtaining these parameters and it is recommended that a user develops the automated procedure for capturing these parameters based on the state of the environment. However, a tool using GPT-4o to automate the skill parameter collection for the default skill sets may be released as a separate repository in the future.
 </details> 
 
 ## Getting Started
