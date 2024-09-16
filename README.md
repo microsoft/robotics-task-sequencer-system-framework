@@ -73,8 +73,10 @@ pip install .
 ```
 
 If using Visual Studio Code, don't forget to set the Python interpreter to the venv with ```Ctrl + Shift + P``` then "Select Interpreter".
+The recommended Python version for this repository is 3.12.
 
 To run the server.py, please also make sure you have [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) ready under your subscription.
+The recommended model is gpt-4o. You may also need to set the Rate limits to a high value.
 
 ## Usage
 
@@ -85,7 +87,7 @@ The framework includes two running Python applications: the server and the core.
 To run the server, run the following command (this is a one-line command):
 
 ```
-./src/tasqsym_encoder/server.py --credentials <CREDENTIALS_FILE> --aoai --aimodel tasqsym_samples.aimodel_samples.model.PickPlaceScenario --config ./src/tasqsym_samples/encoder_sample_settings.json --connection file
+python ./src/tasqsym_encoder/server.py --credentials <CREDENTIALS_FILE> --aoai --aimodel tasqsym_samples.aimodel_samples.model.PickPlaceScenario --config ./src/tasqsym_samples/encoder_sample_settings.json --connection file
 ```
 
 For the ```<CREDENTIAL_FILE>``` please create a file with the appropriate access settings to your Azure OpenAI resource.
@@ -104,7 +106,7 @@ In the web browser UI, enter ```throw away the empty bottle``` in the text box a
 To run the core, run the following command (this is a one-line command):
 
 ```
-./src/tasqsym/core.py --config ./src/tasqsym_samples/sim_robot_sample_settings.json --btfile ./src/tasqsym_samples/generated_sequence_samples/throw_away_the_trash.json --connection standalone
+python ./src/tasqsym/core.py --config ./src/tasqsym_samples/sim_robot_sample_settings.json --btfile ./src/tasqsym_samples/generated_sequence_samples/throw_away_the_trash.json --connection standalone
 ```
 
 Once you run the core, you should see messages like ```runNode {'Node': 'FIND', '@target_description': 'empty_bottle', '@context': 'find the empty_bottle on the right'}``` and ```sending joint angles to the sim robot controller ...``` indicating that the behavior tree node is being parsed and as-if sending commands to the robot controller.
