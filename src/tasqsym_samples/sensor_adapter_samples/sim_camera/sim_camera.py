@@ -5,6 +5,7 @@
 
 import numpy as np
 import json
+import os
 
 import tasqsym.core.common.constants as tss_constants
 import tasqsym.core.common.structs as tss_structs
@@ -25,6 +26,11 @@ class SimCamera(PhysicalSensor):
 
         """Load dummy values from dummy values file."""
         self.dummy_values_filename = configs["dummy_values_file"]
+
+        if not os.path.isfile(self.dummy_values_filename):
+            print("sim vision warning: detected an invalid dummy file path. code will crash when called getSceneryState()")
+            return tss_structs.Status(tss_constants.StatusFlags.SUCCESS)
+
         with open(self.dummy_values_filename) as f: self.dummy_values = json.load(f)
         if "items" not in self.dummy_values:
             msg = "sim vision error: missing 'items' field in dummy values file"
