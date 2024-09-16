@@ -48,12 +48,15 @@ class TaskSequenceDecoder:
             node_id.append(0)
             task = asyncio.create_task(self.runSequence(node["Sequence"], board, rsi, envg, node_id))
             status = await task
-            node_id = node_id[:-1]
+            del node_id[-1]
         elif "Fallback" in node:
             node_id.append(0)
             task = asyncio.create_task(self.runFallback(node["Fallback"], board, rsi, envg, node_id))
             status = await task
-            node_id = node_id[:-1]
+            del node_id[-1]
+        elif "RetryUntilSuccessful" in node:  # decorator must be a single child
+            task = asyncio.create_task(self.retryUntilSuccessful(node["RetryUntilSuccessful"], board, rsi, envg, node_id))
+            status = await task
         elif "Node" in node:
             task = asyncio.create_task(self.runNode(node, board, rsi, envg, node_id))
             status = await task
@@ -64,7 +67,7 @@ class TaskSequenceDecoder:
 
         return status
 
-    async def runSequence(self, nodes: dict,
+    async def runSequence(self, nodes: list[dict],
                           board: blackboard.Blackboard, rsi: skill_interface.SkillInterface, envg: envg_interface.EngineInterface,
                           node_id: list[int]) -> tss_structs.Status:
 
@@ -77,7 +80,7 @@ class TaskSequenceDecoder:
             node_id[-1] += 1
         return tss_structs.Status(tss_constants.StatusFlags.SUCCESS)
 
-    async def runFallback(self, nodes: dict,
+    async def runFallback(self, nodes: list[dict],
                           board: blackboard.Blackboard, rsi: skill_interface.SkillInterface, envg: envg_interface.EngineInterface,
                           node_id: list[int]) -> tss_structs.Status:
  
@@ -155,23 +158,17 @@ class TaskSequenceDecoder:
 
         return status
 
-    async def retryUntilSuccessful(self, nodes: dict,
+    async def retryUntilSuccessful(self, node: dict,
                                    board: blackboard.Blackboard, rsi: skill_interface.SkillInterface, envg: envg_interface.EngineInterface,
                                    node_id: list[int]) -> tss_structs.Status:
 
-        print('retryUntilSuccessful', nodes, node_id)
+        print('retryUntilSuccessful', node, node_id)
 
         while True:
-            success = True
-            for node in nodes:
-                control_node = asyncio.create_task(self.parseControl(node, board, rsi, envg, node_id))
-                status = await control_node
-                if status.status != tss_constants.StatusFlags.SUCCESS:
-                    success = False
-                    break
-                node_id[-1] += 1
-            if (status.status == tss_constants.StatusFlags.ABORTED) \
+            control_node = asyncio.create_task(self.parseControl(node, board, rsi, envg, node_id))
+            status = await control_node
+            if status.status == tss_constants.StatusFlags.SUCCESS: break
+            elif (status.status == tss_constants.StatusFlags.ABORTED) \
                   or (status.status == tss_constants.StatusFlags.ESCAPED):
                 return status
-            if success: break
         return tss_structs.Status(tss_constants.StatusFlags.SUCCESS)
