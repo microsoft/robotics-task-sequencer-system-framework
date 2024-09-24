@@ -4,57 +4,41 @@ Example 1:
 """
 - Input:
 "environment": {
-    "locations": [
-        "kitchen"
-    ],
-    "object_properties" : {
-        "bottle": []
-    },
-    "asset_properties": {
-        "table": [],
-        "trash_can": []
-    },
-    "hand_properties": {
-        "left": [],
-        "right": []
-    },
     "asset_object_relations": {
         "table": ["bottle"],
         "trash_can": []
     },
     "location_asset_relations": {
         "kitchen": ["table", "trash_can"]
+    },
+    "robot_state": {
+        "is_grasping": [],
+        "at_location": "",
+        "hands_used_for_action": []
     }
 }
 "instruction": "Throw away the bottle in the kitchen to the trash can"
 - Output:
 ```python
-{"task_sequence": [
-        "Prepare()",
-        "MoveToLocation(kitchen)",
-        "Find(bottle, left)",
-        "MoveToObjectOrAsset(bottle)",
-        "Grab(bottle, left)",
-        "PickUp(bottle, table)",
-        "Find(trash_can, left)",
-        "MoveToObjectOrAsset(trash_can)",
-        "Release(bottle)"
-    ],
+{
+    "task_sequence": 'action [Prepare]
+                      action [MoveToLocation, "kitchen"]
+                      action [Find, "bottle", "right"]
+                      action [MoveToObjectOrAsset, "bottle"]
+                      action [Grab, "bottle", "right"]
+                      action [PickUp, "bottle", "table"]
+                      action [Find, "trash_can", "right"]
+                      action [MoveToObjectOrAsset, "trash_can"]
+                      action [Release, "bottle"]',
     "environment_after": {
-        "object_properties": {
-            "drink": ["NEAR"]
-        },
-        "asset_properties": {
-            "table": [],
-            "trash_can": ["FOUND", "NEAR"]
-        },
-        "hand_properties": {
-            "left": [],
-            "right": []
-        },
         "asset_object_relations": {
             "table": [],
             "trash_can": []
+        },
+        "robot_state": {
+            "is_grasping": [],
+            "at_location": "kitchen",
+            "hands_used_for_action": ["right"]
         }
     }
 }
@@ -65,50 +49,36 @@ Example 2:
 """
 - Input:
 "environment": {
-    "locations": [
-        "room"
-    ],
-    "object_properties": {
-        "eraser": []
-    },
-    "asset_properties": {
-        "table": []
-    },
-    "hand_properties": {
-        "left": [],
-        "right": []
-    },
     "asset_object_relations": {
         "table": ["eraser"]
     },
     "location_asset_relations": {
         "room": ["table"]
+    },
+    "robot_state": {
+        "is_grasping": [],
+        "at_location": "",
+        "hands_used_for_action": []
     }
 }
-"instruction": "Pick up the eraser on the desk using the right hand"
+"instruction": "Pick up the eraser on the desk using the left hand"
 - Output:
 ```python
-{"task_sequence": [
-        "Prepare()",
-        "MoveToLocation(room)",
-        "Find(eraser, right)",
-        "MoveToObjectOrAsset(eraser)",
-        "Grab(eraser, right)",
-        "PickUp(eraser, table)"
-    ],
+{
+    "task_sequence": 'action [Prepare]
+                      action [MoveToLocation, "room"]
+                      action [Find, "eraser", "left"]
+                      action [MoveToObjectOrAsset, "eraser"]
+                      action [Grab, "eraser", "left"]
+                      action [PickUp, "eraser", "table"]',
     "environment_after": {
-        "object_properties": {
-            "eraser": ["FOUND", "NEAR", "BEING_GRABBED"]
-        },
-        "asset_properties": {
-            "table": []
-        },
-        "hand_properties": {
-            "left": [],
-            "right": ["HAND_IN_USE"]
-        },
         "asset_object_relations": {
             "table": []
+        },
+        "robot_state": {
+            "is_grasping": ["eraser"],
+            "at_location": "room",
+            "hands_used_for_action": ["left"]
         }
     }
 }
@@ -119,58 +89,36 @@ Example 3:
 """
 - Input:
 "environment": {
-    "locations": [
-        "room"
-    ],
-    "object_properties": {
-        "cup": []
-    },
-    "asset_properties": {
-        "table": [],
-        "basket": []
-    },
-    "hand_properties": {
-        "left": [],
-        "right": []
-    },
     "asset_object_relations": {
-        "table": ["cup"],
+        "table": [],
         "basket": []
     },
     "location_asset_relations": {
         "room": ["table", "basket"]
+    },
+    "robot_state": {
+        "is_grasping": ["cup"],
+        "at_location": "room",
+        "hands_used_for_action": ["left"]
     }
 }
-"instruction": "Move the cup into the basket using the right hand"
+"instruction": "Move the cup into the basket"
 - Output:
 ```python
-{"task_sequence": [
-        "Prepare()",
-        "MoveToLocation(room)",
-        "Find(cup, right)",
-        "MoveToObjectOrAsset(cup)",
-        "Grab(cup, right)",
-        "PickUp(cup, table)",
-        "Find(basket, right)",
-        "MoveToObjectOrAsset(basket)",
-        "Put(cup, basket)",
-        "Release(cup)"
-    ],
+{
+    "task_sequence": 'action [Find, "basket", "left"]
+                      action [MoveToObjectOrAsset, "basket"]
+                      action [Put, "cup", "basket"]
+                      action [Release, "cup"]',
     "environment_after": {
-        "object_properties": {
-            "cup": ["NEAR"]
-        },
-        "asset_properties": {
-            "table": [],
-            "basket": ["FOUND", "NEAR"]
-        },
-        "hand_properties": {
-            "left": [],
-            "right": []
-        },
         "asset_object_relations": {
             "table": [],
             "basket": ["cup"]
+        },
+        "robot_state": {
+            "is_grasping": [],
+            "at_location": "room",
+            "hands_used_for_action": ["left"]
         }
     }
 }

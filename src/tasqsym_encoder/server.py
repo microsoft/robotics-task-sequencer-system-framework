@@ -116,7 +116,7 @@ if cfl.data_engine is None: raise Exception("setup failed: could not load data")
 Main code begins here.
 """
 
-templates = Jinja2Templates(directory="./src/tasqsym_encoder/htmls")
+templates = Jinja2Templates(directory="../robotics-task-sequencer-system-framework/src/tasqsym_encoder/htmls")
 
 app = fastapi.FastAPI()
 
@@ -273,14 +273,13 @@ async def interface(user_input: str, session_id: str):
             manager.models[session_id].compile_world(cfl.data_engine)
 
             # run GPT
-            json_dict = manager.models[session_id].generate(user_input, manager.models[session_id].world)
-            print("result from instruction", json_dict)
+            text_response = manager.models[session_id].generate(user_input, manager.models[session_id].world)
+            print("result from instruction", text_response)
+            format_success, json_dict = manager.models[session_id].format_response(text_response)
 
             # return to UI for user confirmation
-            if isinstance(json_dict, dict):
-                """
-                Compile process. Always enters this process upon user instruction.
-                """
+            if format_success:
+                """Compile process. Always enters this process upon user instruction."""
                 manager.states[session_id].task_plan = json_dict
                 # set the flag to wait for the user confirmation
                 manager.states[session_id].compiled_plan = await compile(json_dict, session_id)
@@ -288,7 +287,7 @@ async def interface(user_input: str, session_id: str):
                 if show_output_from_ai: return f"Please enter 'Y' if the following task is okay:", json.dumps(manager.states[session_id].task_plan, indent=4)
                 else: return f"Please enter 'Y' if the following task is okay:", json.dumps(manager.states[session_id].compiled_plan, indent=4)
             else:
-                return json_dict
+                return text_response
 
         elif manager.states[session_id].current_state == ServerState.ON_USER_CONFIRMATION:
             await notify(f"CONSOLE_LOG: handle user confirmation", session_id)
@@ -297,21 +296,19 @@ async def interface(user_input: str, session_id: str):
                 manager.models[session_id].reset_history()
             else:
                 await notify(f"CONSOLE_LOG: got correction from user", session_id)
-                json_dict = manager.models[session_id].generate(
-                    user_input, manager.models[session_id].world, is_user_feedback=True)
-                print("result from feedback:", json_dict)
-                 # if the return is in dict format, it means that the user feedback is not enough
-                if isinstance(json_dict, dict):
-                    """
-                    Correction process. USUALLY DOES NOT ENTER THIS PROCESS UNLESS A USER CORRECTS THE INSTURCTION INSTEAD OF TYPING 'Y'.
-                    """
+                text_response = manager.models[session_id].generate(user_input, manager.models[session_id].world, is_user_feedback=True)
+                print("result from feedback:", text_response)
+                format_success, json_dict = manager.models[session_id].format_response(text_response)
+
+                if format_success:
+                    """Correction process. USUALLY DOES NOT ENTER THIS PROCESS UNLESS A USER CORRECTS THE INSTURCTION INSTEAD OF TYPING 'Y'."""
                     manager.states[session_id].task_plan = json_dict
                     manager.states[session_id].compiled_plan = await compile(json_dict, session_id)
                     if show_output_from_ai: return f"Please enter 'Y' if the following task is okay:", json.dumps(manager.states[session_id].task_plan, indent=4)
                     else: return f"Please enter 'Y' if the following task is okay:", json.dumps(manager.states[session_id].compiled_plan, indent=4)
                 else:
                     manager.states[session_id].current_state = ServerState.ON_TASK_REQUEST
-                    return json_dict
+                    return text_response
 
         # depending on branch, will enter below right after ON_USER_CONFIRMATION
         if manager.states[session_id].current_state == ServerState.ON_TASK_SEND:

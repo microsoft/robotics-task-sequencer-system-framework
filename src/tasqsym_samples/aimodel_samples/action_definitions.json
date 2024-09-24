@@ -1,0 +1,45 @@
+{
+    "Actions": [
+        {
+            "Name": "Find",
+            "Arguments": ["@target", "@side"],
+            "Description": "The robot finds the object or asset specified by @target located on @side. @side is either left or right with the right being default and should match the hand used for other actions."
+        },
+        {
+            "Name": "Grab",
+            "Arguments": ["@target", "@side"],
+            "Description": "The robot takes hold of the object specified by @target using the hand specified in @side. @side is either left or right with the right being default. The action should only appear after the robot is near @target in a previous action."
+        },
+        {
+            "Name": "MoveToLocation",
+            "Arguments": ["@location"],
+            "Description": "The robot moves from the current location to the location specified by @location. This action is required before doing a Find action."
+        },
+        {
+            "Name": "MoveToObjectOrAsset",
+            "Arguments": ["@target"],
+            "Description": "The robot moves near the object or asset specified by @target. The action should only appear after the robot has found @target in a previous action."
+        },
+        {
+            "Name": "Release",
+            "Arguments": ["@target"],
+            "Description": "The robot releases @target. The action should only appear once @target is grabbed by the robot."
+        },
+        {
+            "Name": "PickUp",
+            "Arguments": ["@target", "@asset"],
+            "Description": "The robot lifts @target from the @asseet. The action should only appear once @target is grabbed by the robot."
+        },
+        {
+            "Name": "Put",
+            "Arguments": ["@target", "@asset"],
+            "Description": "The robot places @target to @asset. The action should only appear once @target is grabbed by the robot and is near @asset in a previous action."
+        },
+        {
+            "Name": "Prepare",
+            "Arguments": [],
+            "Description": "Prepare the robot. No actions should appear prior to this action."
+        }
+    ],
+    "Conditions": []
+}
