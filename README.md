@@ -87,7 +87,7 @@ The framework includes two running Python applications: the server and the core.
 To run the server, run the following command (this is a one-line command):
 
 ```
-python ./src/tasqsym_encoder/server.py --credentials <CREDENTIALS_FILE> --aoai --aimodel tasqsym_samples.aimodel_samples.model.PickPlaceScenario --config ./src/tasqsym_samples/encoder_sample_settings.json --connection file
+python ./src/tasqsym_encoder/server.py --credentials <CREDENTIALS_FILE> --aoai --aioutput --aimodel tasqsym_samples.aimodel_samples.model.PickPlaceScenario --config ./src/tasqsym_samples/encoder_sample_settings.json --connection file
 ```
 
 For the ```<CREDENTIAL_FILE>``` please create a file with the appropriate access settings to your Azure OpenAI resource.
@@ -141,16 +141,18 @@ The framework is designed so that users can develop and replace parts of the cod
         └── <custom_prompt_set>
              ├── __init__.py
              ├── my_model.py
+             ├── action_definitions.json
+             ├── sample_environment.json   # environment for testing prompts
              ├── prompt
-             │      ├── action_prompt.txt
+             │      ├── action_prompt.txt  # often used as-is
              │      ├── environment_prompt.txt
              │      ├── example_prompt.txt
              │      ├── output_prompt.txt
-             │      └── role_prompt.txt
+             │      └── role_prompt.txt    # often used as-is
              ├── query
-             │      └── query.txt
+             │      └── query.txt          # often used as-is
              ├── system
-             │      └── system.txt
+             │      └── system.txt         # often used as-is
              └── my_settings_for_server.json
 └── <custom_skill_library>
     ├── setup.py
