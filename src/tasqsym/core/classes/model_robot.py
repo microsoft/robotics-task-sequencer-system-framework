@@ -39,7 +39,7 @@ class ModelRobot(ABC):
         Model creation process if any.
         model_info: model information from the robot structure file
         configs:    model-specific configurations specified in the robot structure file
-        ---
+
         return: success status
         """
         pass
@@ -48,7 +48,7 @@ class ModelRobot(ABC):
     def destroy(self) -> tss_structs.Status:
         """
         Model destroy process if any.
-        ---
+
         return: success status
         """
         pass
@@ -60,7 +60,7 @@ class ModelRobot(ABC):
         task:         the name of the current task requesting the configuration
         params:       information which could be used for determining the configuration
         latest_state: the latest robot state of the target robot
-        ---
+
         return: the predefined configuration
         """
         pass
@@ -78,7 +78,7 @@ class ModelRobot(ABC):
         desired_transform: the desired orientation of the control link in the "standard description"
         known_transforms:  the transformation between the "gripper-specific description" and the "standard description" (if known)
         robot_transform:   the current orientation of the root (base) robot in the world coordinate
-        ---
+
         return: the orientation of the control link in the robot-specific coordinate
         """
         raise NotImplementedError()
@@ -89,7 +89,7 @@ class ModelRobot(ABC):
         This transform could vary depending on the grasp (i.e., shape of the fingers), therefore, should be set everytime a grasp is performed.
 
         params: parameters used to get the transform pair (if any)
-        ---
+
         return: a pair of transforms (an orientation in the standard description and its equivalent specific to the gripper)
         """
         raise NotImplementedError()

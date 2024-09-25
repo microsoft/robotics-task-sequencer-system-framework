@@ -158,7 +158,7 @@ class EngineInterface:
         """
         Load components and initial robot state to all engines.
         world_construct_params: parameters for world construction if any (to use only for simulation training)
-        ---
+
         return: success or errors if any
         """
         print("callEnvironmentLoadPipeline")
@@ -241,7 +241,7 @@ class EngineInterface:
         """
         Execute the environment engine pipeline.
         input_action: the desired actions of the robot
-        ---
+
         return: success or errors if any
         """
         print("callEnvironmentUpdatePipeline")

@@ -36,7 +36,7 @@ class EngineBase(ABC):
         general_config:         general settings for the entire framework (assigned field, not used by the default engines)
         robot_structure_config: robot structure configurations
         engine_config:          configurations specific to this engine
-        ---
+
         return: whether initiation was successful or not
         """
         pass
@@ -45,7 +45,7 @@ class EngineBase(ABC):
         """
         Update rule of the engine. Implementation not required for engines not in the pipeline (e.g., DataEngine).
         world_state: updates by an engine from a prior engine in the pipeline
-        ---
+
         return: updates by the engine to pass to a later engine in the pipeline
         """
         raise NotImplementedError()
@@ -54,7 +54,7 @@ class EngineBase(ABC):
     async def close(self) -> tss_structs.Status:
         """
         Closing rule of the engine. Implementation not required for engines not in the pipeline (e.g., DataEngine).
-        ---
+
         return: whether close was successful or not
         """
         pass
@@ -164,7 +164,7 @@ class KinematicsEngineBase(EngineBase):
     def getBaseRobotId(self) -> str:
         """
         Get the robot ID of the root(base) robot in the combined robot tree.
-        ---
+
         return: robot ID
         """
         return self.base_id
@@ -172,7 +172,7 @@ class KinematicsEngineBase(EngineBase):
     def getFocusEndEffectorRobotId(self) -> str:
         """
         Get the robot ID of the focus end-effector.
-        ---
+
         return: robot ID
         """
         return self.end_effector_id
@@ -181,7 +181,7 @@ class KinematicsEngineBase(EngineBase):
         """
         Get the sensor ID of the focus sensor.
         sensor_type: the sensor type of the focus sensor
-        ---
+
         return: sensor ID
         """
         if sensor_type not in self.sensor_ids: return ""
@@ -191,7 +191,7 @@ class KinematicsEngineBase(EngineBase):
         """
         Get the robot ID of the parent of the focus sensor.
         sensor_type: the sensor type of the focus sensor
-        ---
+
         return: robot ID
         """
         if sensor_type not in self.sensor_ids: return ""
@@ -203,7 +203,7 @@ class KinematicsEngineBase(EngineBase):
     def getFocusEndEffectorParentId(self) -> str:
         """
         Get the robot ID of the parent of the focus end-effector.
-        ---
+
         return: robot ID
         """
         if (self.end_effector_id == "") or (self.end_effector_id not in self.robot_models): return ""
@@ -212,7 +212,7 @@ class KinematicsEngineBase(EngineBase):
     def getMultipleFocusEndEffectorRobotIds(self) -> list[str]:
         """
         Get the robot IDs of the focus end-effectors.
-        ---
+
         return: robot IDs
         """
         return self.multiple_end_effector_ids
@@ -223,7 +223,7 @@ class KinematicsEngineBase(EngineBase):
         task:                 the name of the current task requesting the transformation
         params:               the parameters of the task to use for calculating the transformation
         current_robot_states: the current state of all robots in the combined robot tree
-        ---
+
         return: transformations in the form {robot_id: {"frame->link": transform, ...}} (note, can return for multiple transforms)
         """
         return self.robot_combiner.getTaskTransform(task, params, current_robot_states)
@@ -233,7 +233,7 @@ class KinematicsEngineBase(EngineBase):
         Get the recognition method to use for the current task based on the rules defined by the robot model combiner.
         task:   the name of the current task
         params: information which could be used for deciding the recognition method
-        ---
+
         return: the name of the recognition method to use for the current task
         """
         return self.robot_combiner.getRecognitionMethod(task, params)
@@ -245,7 +245,7 @@ class KinematicsEngineBase(EngineBase):
         task:         the name of the current task requesting the configuration
         params:       information which could be used for determining the configuration
         latest_state: the latest robot state of the target robot
-        ---
+
         return: the predefined configuration
         """
         if unique_id not in self.robot_models: return None
@@ -272,7 +272,7 @@ class KinematicsEngineBase(EngineBase):
         control_link:      the link of interest
         desired_transform: the desired orientation of the control link in the "standard description"
         robot_transform:   the current orientation of the root (base) robot in the world coordinate
-        ---
+
         return: the orientation of the control link in the robot-specific coordinate
         """
         if unique_id not in self.robot_models: return None
@@ -286,7 +286,7 @@ class KinematicsEngineBase(EngineBase):
         Get the list of last used desired actions sent to a specific robot.
         unique_id:   the robot ID of interest
         action_type: filter a specific action type (returns all actions regardless of type if None)
-        ---
+
         return: list of last used desired actions
         """
         if unique_id not in self.robot_models: return []
@@ -302,7 +302,7 @@ class KinematicsEngineBase(EngineBase):
         """
         Get the action types of the most recent actions sent to a specific robot.
         unique_id: the robot ID of interest
-        ---
+
         return: list of action types
         """
         if unique_id not in self.robot_models: return []
@@ -340,7 +340,7 @@ class ControllerEngineBase(EngineBase):
     async def updateActualRobotStates(self) -> tss_structs.Status:
         """
         Get the current robot state from the controllers and store to latest_robot_state.
-        ---
+
         return: whether state update was successful or not
         """
         pass
@@ -348,7 +348,7 @@ class ControllerEngineBase(EngineBase):
     def getLatestRobotStates(self) -> tss_structs.CombinedRobotState:
         """
         Get the latest robot state stored in the engine.
-        ---
+
         return: robot state
         """
         return self.latest_robot_state
@@ -357,7 +357,7 @@ class ControllerEngineBase(EngineBase):
         """
         Get the transformation between the world origin and the specified sensor's sensor frame.
         sensor_id: the sensor ID of interest
-        ---
+
         return: success status and transformation
         """
         if sensor_id in self.sensors:
@@ -369,7 +369,7 @@ class ControllerEngineBase(EngineBase):
     async def reset(self) -> tss_structs.Status:
         """
         Reset the engine running the controller if the engine is some simulation environment.
-        ---
+
         return: whether reset was successful
         """
         if self.control_in_simulated_world: raise NotImplementedError()
@@ -377,7 +377,7 @@ class ControllerEngineBase(EngineBase):
     async def loadComponents(self, components: list[world_format.ComponentStruct]) -> tss_structs.Status:
         """
         Load components to the engine if the engine running the controller is some simulation environment.
-        ---
+
         return: whether load was successful
         """
         if self.control_in_simulated_world: raise NotImplementedError()
@@ -385,7 +385,7 @@ class ControllerEngineBase(EngineBase):
     async def emergencyStop(self) -> tss_structs.Status:
         """
         Emergency stop the controllers connected to the engine.
-        ---
+
         return: whether stop was successful
         """
         stops: list[asyncio.Coroutine] = []
@@ -405,7 +405,7 @@ class ControllerEngineBase(EngineBase):
         unique_id: the sensor ID
         cmd:       the type of data to obtain from the sensor
         rest:      any additional parameters for obtaining the data
-        ---
+
         return: success status and sensor data
         """
         if unique_id not in self.sensors: return (tss_structs.Status(tss_constants.StatusFlags.FAILED), None)
@@ -419,7 +419,7 @@ class ControllerEngineBase(EngineBase):
         unique_id: the sensor ID
         cmd:       the type of data to obtain from the sensor
         rest:      any additional parameters for obtaining the data
-        ---
+
         return: success status and sensor data
         """
         if unique_id not in self.sensors: return (tss_structs.Status(tss_constants.StatusFlags.FAILED), None)
@@ -452,7 +452,7 @@ class DataEngineBase(EngineBase):
         general_config:         general settings for the entire framework (assigned field, not used by the default engines)
         robot_structure_config: robot structure configurations
         engine_config:          configurations specific to this engine
-        ---
+
         return: whether initiation was successful or not
         """
         pass
@@ -462,7 +462,7 @@ class DataEngineBase(EngineBase):
         """
         Get data from the loaded data or directly from the storage.
         cmd: the type of data to get
-        ---
+
         return: success status and data
         """
         pass
@@ -473,7 +473,7 @@ class DataEngineBase(EngineBase):
         Update information in the loaded data or in the storage. If loaded data, this will be a local change not affecting the storage.
         cmd:  the type of data to update
         data: the content of the updated information
-        ---
+
         return: whether update was success or not
         """
         pass
@@ -482,7 +482,7 @@ class DataEngineBase(EngineBase):
     def save(self) -> tuple[tss_structs.Status, dict]:
         """
         Used by the encoder to save data (e.g., output to a file or upload to a storage).
-        ---
+
         return: success status and settings used for storing data (the returned settings should be passed to the decoder)
         """
         pass
@@ -501,7 +501,7 @@ class WorldConstructorEngineBase(EngineBase):
         """
         Spawn components within the engine.
         params: parameters for spawning components
-        ---
+
         return: list of spawned components
         """
         pass
@@ -519,7 +519,7 @@ class SimulationEngineBase(EngineBase):
     async def reset(self) -> tss_structs.Status:
         """
         Reset the engine world.
-        ---
+
         return: successful or not
         """
         pass
@@ -529,7 +529,7 @@ class SimulationEngineBase(EngineBase):
         """
         Load the robot inside the engine world.
         init_state: initial state of the robot on loading.
-        ---
+
         return: successful or not
         """
         pass
@@ -539,7 +539,7 @@ class SimulationEngineBase(EngineBase):
         """
         Load the components inside the engine world if any.
         components: list of components to load into the world
-        ---
+
         return: successful or not
         """
         pass

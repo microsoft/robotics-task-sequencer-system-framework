@@ -32,7 +32,7 @@ class PhysicalRobot(ABC):
         Connect to the robot controller.
         model_info: controller information from the robot structure file
         configs:    controller-specific configurations specified in the robot structure file
-        ---
+
         return: success status
         """
         pass
@@ -43,7 +43,7 @@ class PhysicalRobot(ABC):
         Disconnect from the robot controller.
         model_info: controller information from the robot structure file
         configs:    controller-specific configurations specified in the robot structure file
-        ---
+
         return: success status
         """
         pass
@@ -52,7 +52,7 @@ class PhysicalRobot(ABC):
     async def getLatestState(self) -> tss_structs.RobotState:
         """
         Get the latest state of the robot from the controller.
-        ---
+
         return: robot status
         """
         pass
@@ -61,7 +61,7 @@ class PhysicalRobot(ABC):
     async def emergencyStop(self) -> tss_structs.Status:
         """
         Emergency stop the controller.
-        ---
+
         return: success status
         """
         pass
@@ -70,7 +70,7 @@ class PhysicalRobot(ABC):
         """
         Get the link transform from the controller. Robots with an end-effector role may not have such capability and implementation left blank.
         link_name: the link of interest
-        ---
+
         return: the transformation from the world coordinate to the specified link
         """
         raise NotImplementedError()
@@ -80,7 +80,7 @@ class PhysicalRobot(ABC):
         Controller initiation process (triggered when a preparation skill is at the beginning of a sequence).
         desired_actions: not used
         ref_state:       the current state of the robot
-        ---
+
         return: success status
         """
         print("\
@@ -93,7 +93,7 @@ class PhysicalRobot(ABC):
         Send joint angles to the controller. Required for most type of robots.
         desired_actions: a list of desired actions (usually a list of one action about the target joint angles)
         ref_state:       the current state of the robot
-        ---
+
         return: success status
         """
         raise NotImplementedError()
@@ -101,7 +101,7 @@ class PhysicalRobot(ABC):
     async def abortJointAngles(self) -> tss_structs.Status:
         """
         Cancel the send joint angle command.
-        ---
+
         return: success status
         """
         raise NotImplementedError()
@@ -111,7 +111,7 @@ class PhysicalRobot(ABC):
         Send base movment to the controller. Required for MOBILE_BASE or MOBILE_MANIPULATOR type robots.
         desired_actions: a list of desired actions (usually a list of one action about the base movement)
         ref_state:       the current state of the robot
-        ---
+
         return: success status
         """
         raise NotImplementedError()
@@ -119,7 +119,7 @@ class PhysicalRobot(ABC):
     async def abortBasePose(self) -> tss_structs.Status:
         """
         Cancel the base movement command.
-        ---
+
         return: success status
         """
         raise NotImplementedError()
@@ -129,7 +129,7 @@ class PhysicalRobot(ABC):
         Send target poses in cartesian space to the controller.
         desired_actions: a list of desired actions (there could be more than one target pose (e.g., dual arm manipulation))
         ref_state:       the current state of the robot
-        ---
+
         return: success status
         """
         raise NotImplementedError()
@@ -137,7 +137,7 @@ class PhysicalRobot(ABC):
     async def abortTargetMotion(self) -> tss_structs.Status:
         """
         Cancel the target pose command.
-        ---
+
         return: success status
         """
         raise NotImplementedError()
@@ -147,7 +147,7 @@ class PhysicalRobot(ABC):
         Send point-to targets in cartesian space to the controller.
         desired_actions: a list of desired actions (usually a list of one action about the point-to target)
         ref_state:       the current state of the robot
-        ---
+
         return: success status
         """
         raise NotImplementedError()
@@ -155,7 +155,7 @@ class PhysicalRobot(ABC):
     async def abortPointToMotion(self) -> tss_structs.Status:
         """
         Cancel the point to command.
-        ---
+
         return: success status
         """
         raise NotImplementedError()
@@ -165,7 +165,7 @@ class PhysicalRobot(ABC):
         Send a control command to the controller. Not used by the skills in the default skill library but could be used for a custom skill.
         desired_actions: a list of desired actions (usually a list of one action about the command)
         ref_state:       the current state of the robot
-        ---
+
         return: success status
         """
         raise NotImplementedError()
@@ -173,7 +173,7 @@ class PhysicalRobot(ABC):
     async def abortControlCommand(self) -> tss_structs.Status:
         """
         Cancel the control command.
-        ---
+
         return: success status
         """
         raise NotImplementedError()

@@ -31,7 +31,7 @@ class PhysicalSensor(ABC):
         Connect to the sensor.
         model_info: sensor information from the robot structure file
         configs:    sensor-specific configurations specified in the robot structure file
-        ---
+
         return: success status
         """
         pass
@@ -42,7 +42,7 @@ class PhysicalSensor(ABC):
         Disconnect from the sensor.
         model_info: sensor information from the robot structure file
         configs:    sensor-specific configurations specified in the robot structure file
-        ---
+
         return: success status
         """
         pass
@@ -52,7 +52,7 @@ class PhysicalSensor(ABC):
         Get sensor data for sensors of type FORCE_6D. Implementation required if FORCE_6D type.
         cmd:       the type of data to obtain from the sensor
         rest:      any additional parameters for obtaining the data
-        ---
+
         return: success status and sensor data
         """
         raise NotImplementedError()
@@ -62,7 +62,7 @@ class PhysicalSensor(ABC):
         Get sensor data for sensors of type CAMERA_3D. Implementation required if CAMERA_3D type.
         cmd:       the type of data to obtain from the sensor
         rest:      any additional parameters for obtaining the data
-        ---
+
         return: success status and sensor data
         """
         raise NotImplementedError()

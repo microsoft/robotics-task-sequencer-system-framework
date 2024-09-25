@@ -25,7 +25,7 @@ class DecoderAbstract(ABC):
         Parameter decoding irrelevant to the current robot state or the current state of the environment.
         encoded_params: task parameters
         board:          the blackboard to read the values and/or flags from
-        ---
+
         return: success status
         """
         pass
@@ -37,7 +37,7 @@ class DecoderAbstract(ABC):
         encoded_params: task parameters
         board:          the blackboard to read the values and/or flags from
         envg:           access to the robot model and controller states from engines
-        ---
+
         return: success status
         """
         print("skill decoder warning: fillRuntimeParameters not implemented, assuming no runtime parameters")
@@ -47,7 +47,7 @@ class DecoderAbstract(ABC):
     def asConfig(self) -> dict:
         """
         Return the parameters in a format that can be loaded by the skill module.
-        ---
+
         return: parameters
         """
         pass
@@ -55,7 +55,7 @@ class DecoderAbstract(ABC):
     def isReadyForExecution(self) -> bool:
         """
         Return whether the decoding procedure including filling runtime parameters has finished.
-        ---
+
         return: finished state
         """
         return self.decoded

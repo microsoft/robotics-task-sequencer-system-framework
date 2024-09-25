@@ -44,7 +44,7 @@ class SkillAbstract(ABC):
         """
         Add actions before executing the skill if any (e.g., sending the pre-grasp fingers at start of grasp).
         envg: access to the robot model and controller states from engines
-        ---
+
         return: action
         """
         return None
@@ -67,7 +67,7 @@ class SkillAbstract(ABC):
         observation: current observation to append to (may also remove default observations if needed)
         envg:        access to the robot model and controller states from engines
         training:    used to return some states only during training
-        ---
+
         return: updated observation
         """
         return observation
@@ -79,7 +79,7 @@ class SkillAbstract(ABC):
         These actions will be converted using formatAction() to be processed within the system.
 
         observation: current states
-        ---
+
         return: action in dictionary format
         """
         pass
@@ -91,7 +91,7 @@ class SkillAbstract(ABC):
         Note, this is split from getAction for compatibility with some training environments.
 
         action: action in dictionary form
-        ---
+
         return: formatted action        
         """
         pass
@@ -117,7 +117,7 @@ class SkillAbstract(ABC):
         Any finishing process of the skill, especially saving values and/or flags to the blackboard (e.g., run recognition and save results).
         envg:  access to the robot model and controller states from engines
         board: the blackboard to save the values and/or flags to
-        ---
+
         return: action (optional)
         """
         return None

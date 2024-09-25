@@ -19,7 +19,7 @@ class ModelRobotCombiner:
 
         task:   the name of the task requesting the focus end-effector
         params: parameters of the task to be used for the decision of the focus end-effector
-        ---
+
         return: robot ID of the set end-effector
         """
         raise NotImplementedError()
@@ -32,7 +32,7 @@ class ModelRobotCombiner:
         sensor_type: the sensor type of the focus sensor
         task:        the name of the task requesting the focus sensor
         params:      parameters of the current task to be used for the decision of the focus sensor
-        ---
+
         return: sensor ID of the set sensor
         """
         raise NotImplementedError()
@@ -44,7 +44,7 @@ class ModelRobotCombiner:
 
         task:   the name of the task requesting the focus end-effectors
         params: parameters of the task to be used for the decision of the focus end-effector
-        ---
+
         return: list of end-effector robot IDs that were set
         """
         raise NotImplementedError()
@@ -57,7 +57,7 @@ class ModelRobotCombiner:
         task:                 the name of the task requesting the transformation
         params:               the parameters of the task to use for calculating the transformation
         current_robot_states: the current state of all robots in the combined robot tree
-        ---
+
         return: transformations in the form {robot_id: {"frame->link": transform, ...}} (note, can return for multiple transforms)
         """
         raise NotImplementedError()
@@ -68,7 +68,7 @@ class ModelRobotCombiner:
 
         task:   the name of the task requesting the method
         params: information which could be used for deciding the recognition method
-        ---
+
         return: the name of the recognition method to use
         """
         raise NotImplementedError()
