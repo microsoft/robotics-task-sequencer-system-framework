@@ -4,6 +4,7 @@
 # --------------------------------------------------------------------------------------------
 
 import asyncio
+import time
 
 import tasqsym.core.common.constants as tss_constants
 import tasqsym.core.common.structs as tss_structs
@@ -14,11 +15,13 @@ import tasqsym.core.interface.skill_interface as skill_interface
 
 class TaskSequenceDecoder:
 
-    def __init__(self):
+    def __init__(self, network_client=None):
 
         # logging
         self.log_last_executed_node_name = ""
         self.log_last_executed_node_id = []
+
+        self.network_client = network_client
 
     async def runTree(self, bt: dict,
                       board: blackboard.Blackboard, rsi: skill_interface.SkillInterface, envg: envg_interface.EngineInterface,
@@ -113,6 +116,17 @@ class TaskSequenceDecoder:
 
         self.log_last_executed_node_id = node_id
         self.log_last_executed_node_name = node["Node"]
+
+        # send information about node-at-execution to server if applicable
+        if self.network_client is not None:
+            if "@node_tag" in node: node_tag = node["@node_tag"]
+            else: node_tag = ""
+            await self.network_client.send_feedback({
+                "id": int(time.strftime("%Y%m%d%H%M%S", time.localtime())),
+                "type": "information",
+                "node_tag": node_tag,
+                "node_pointer": node_id
+            })
 
         # if condition node
         if node["Node"] == "CONDITION":

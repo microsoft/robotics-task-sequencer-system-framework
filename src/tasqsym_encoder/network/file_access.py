@@ -33,5 +33,7 @@ class LocalFileBridge:
         return timestamp
 
     async def wait_feedback(self, timestamp) -> bool: self.feedback = timestamp
-            
+
+    async def wait_any_feedback(self, after_this_timestamp) -> bool: self.feedback = after_this_timestamp
+
     def disconnect(self): pass

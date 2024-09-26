@@ -24,7 +24,7 @@ async def distribute_mode(default_tssconfig: str, network_client):
     envg = envg_interface.EngineInterface()
     rsi = skill_interface.SkillInterface()
     board = blackboard.Blackboard()
-    tsd = bt_decoder.TaskSequenceDecoder()
+    tsd = bt_decoder.TaskSequenceDecoder(network_client)
 
     async def return_status(msgid, msgtype: str, status: tss_structs.Status):
         print(status.message)

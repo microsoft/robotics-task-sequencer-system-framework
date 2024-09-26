@@ -77,5 +77,25 @@ class MQTTBridgeOnServer:
             return False
         return True
 
+    async def wait_any_feedback(self, after_this_timestamp) -> bool:
+        print("waiting for any feedback in topic %s" % (self.topic_d2c_feedback))
+        try:
+            while True:
+                found_stamps = []
+                for stamp, msg in self.mqtt_queue[self.topic_d2c_feedback].items():
+                    if stamp > after_this_timestamp:
+                        found_stamps.append(stamp)
+                if len(found_stamps) > 0:
+                    found_stamps.sort()
+                    timestamp = found_stamps[0]
+                    break
+                await asyncio.sleep(.1)
+            self.feedback = self.mqtt_queue[self.topic_d2c_feedback].pop(timestamp)
+        except asyncio.CancelledError:
+            print('cancelled during monitoring')
+            self.feedback = None
+            return False
+        return True
+
     def disconnect(self):
         self.mqtt_client.disconnect()
