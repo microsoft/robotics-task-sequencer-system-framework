@@ -261,7 +261,7 @@ async def interface(user_input: str, session_id: str):
 
         if user_input == 'cancel': return await send_cancel()  # cancel instructions
 
-        if user_input == 'e-stop': await send_estop()
+        if user_input == 'e-stop': return await send_estop()
 
         if manager.states[session_id].current_state == ServerState.ON_TASK_REQUEST:
             await notify(f"CONSOLE_LOG: handle task request", session_id)
