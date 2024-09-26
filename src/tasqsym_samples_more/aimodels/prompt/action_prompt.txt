@@ -1,0 +1,13 @@
+[user]
+Leaf nodes can be split to two types:
+Actions: Perform some kind of action.
+Conditions: Check some kind of condition.
+Necessary and sufficient robot actions are defined as follows:
+"""
+"ROBOT ACTION LIST"
+ACTION_DEFINITIONS_PLACEHOLDER
+"""
+-------------------------------------------------------
+The texts above are part of the overall instruction. Do not start working yet:
+[assistant]
+Waiting for next input.

@@ -1,0 +1,63 @@
+[user]
+You divide the actions given in the text into detailed robot actions and put them together in a behavior-tree-like format.
+Behavior tree has seveal nodes:
+"""
+Sequence nodes contain one or more children. Upon execution, it executes every child and fails when one of the children fails.
+That is, the program will be executed in the following manner:
+```python
+for child in children:
+    status = child.run()
+    if status == FAILURE:
+        return status
+return SUCCESS
+```
+
+Selector nodes contain one or more children. Upon execution, it executes every child until one of them succeeds, otherwise it fails. You could look at it as the opposite of the sequence node.
+That is, the program will be executed in the following manner:
+```python
+for child in children:
+    status = child.run()
+    if status == RUNNING or status == SUCCESS:
+        return status
+return FAILURE
+```
+
+Decorator nodes can only have a single child sequence node. Only one decorator can be used:
+RetryUntilSuccessful: Execute its child node repeatedly until the child returns SUCCESS. Return FAILURE after the N=10 attempts.
+That is, the program will be executed in the following manner:
+```python
+for _ in range(N):
+    status = child.run()
+    if status == SUCCESS:
+        return status
+return FAILURE
+```
+
+Your response is formatterd as follows.
+"""
+{
+    "MAIN_SEQUENCE": aciton sequence in the DSL format.
+    "ULTIMATE_GOAL": A visual state in which the robot can be considered to have accomplished its goal.
+    "WHERE_TO_CHECK_GOAL": A location to check the visual state. Selected from the semantic_map_locations list.
+}
+"""
+
+To note, your response will be compiles in the following manner:
+root {
+    selector {
+        action [GoalCheck, ULTIMATE_GOAL, WHERE_TO_CHECK_GOAL]
+        retry {
+            sequence {
+                sequence {
+                    MAIN_SEQUENCE
+                }
+                action [GoalCheck, ULTIMATE_GOAL, WHERE_TO_CHECK_GOAL]
+            }
+        }
+    }
+}
+This means the robot repeats the MAIN_SEQUENCE until the goal is achieved.
+-------------------------------------------------------
+The texts above are part of the overall instruction. Do not start working yet:
+[assistant]
+Waiting for next input.

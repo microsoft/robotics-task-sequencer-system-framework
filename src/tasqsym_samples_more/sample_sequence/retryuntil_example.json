@@ -1,0 +1,41 @@
+{
+    "root": {
+        "BehaviorTree": {
+            "ID": "MainTree",
+            "Tree": [
+                {
+                    "Sequence": [
+                        {
+                            "Node": "ACTION",
+                            "@print_text": "init",
+                            "@set_variable": "{flag}",
+                            "@set_value": true
+                        },
+                        {
+                            "RetryUntilSuccessful": {
+                                "Sequence": [
+                                    {
+                                        "Node": "ACTION",
+                                        "@print_text": "try"
+                                    },
+                                    {
+                                        "Node": "CONDITION",
+                                        "@variable_name": "{flag}"
+                                    },
+                                    {
+                                        "Node": "ACTION",
+                                        "@print_text": "succeeded"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Node": "ACTION",
+                            "@print_text": "complete"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

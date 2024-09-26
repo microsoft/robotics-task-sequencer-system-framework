@@ -1,0 +1,9 @@
+{
+    "engines": {
+        "data": {
+            "engine": "tasqsym.core.engines.data_engine.DataEngine",
+            "class_id": "",
+            "config": "../robotics-task-sequencer-system-framework/src/tasqsym_samples_more/aimodels/sample_environment.json"
+        }
+    }
+}

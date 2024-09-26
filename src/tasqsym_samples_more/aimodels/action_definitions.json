@@ -1,0 +1,64 @@
+{
+    "Actions": [
+        {
+            "Name": "GoTo",
+            "Arguments": ["@location"],
+            "Description": "Navigate the robot to @location."
+        },
+        {
+            "Name": "PickUp",
+            "Arguments": ["@object", "@asset", "@location"],
+            "Description": "The robot grasps @object from @asset. The action should only appear after robot is at @location in a previous action."
+        },
+        {
+            "Name": "Place",
+            "Arguments": ["@object", "@asset", "@location"],
+            "Description": "The robot places @object in its hand to @asset. This action should only appear after @object had been picked up in a previous action. The action should only appear after robot is at @location in a previous action."
+        },
+        {
+            "Name": "Pour",
+            "Arguments": ["@object", "@asset", "@location"],
+            "Description": "The robot tilts @object in its hand to pour the contents into @asset. This action should only appear after @object had been picked up in a previous action. The action should only appear after robot is at @location in a previous action."
+        },
+        {
+            "Name": "Wipe",
+            "Arguments": ["@object", "@asset", "@location"],
+            "Description": "The robot wipes @asset using @object in its hand. This action should only appear after @object had been picked up in a previous action. The action should only appear after robot is at @location in a previous action."
+        },
+        {
+            "Name": "PushButton",
+            "Arguments": ["@object", "@asset", "@location"],
+            "Description": "The robot pushes the button on @asset. @object specifies the name of the button. The action should only appear after robot is at @location in a previous action."
+        },
+        {
+            "Name": "ThrowAway",
+            "Arguments": ["@object", "@asset", "@location"],
+            "Description": "The robot throws away @object into @asset. This action should only appear after @object had been picked up in a previous action. The action should only appear after robot is at @location in a previous action."
+        },
+        {
+            "Name": "Open",
+            "Arguments": ["@asset", "@location"],
+            "Description": "The robot grasps a handle on @asset and opens @asset, then releases the handle. The action should only appear after robot is at @location in a previous action."
+        },
+        {
+            "Name": "Close",
+            "Arguments": ["@asset", "@location"],
+            "Description": "The robot grasps a handle on @asset and closes @asset, then releases the handle. The action should only appear after robot is at @location in a previous action."
+        },
+        {
+            "Name": "EmptySequence"
+        }
+    ],
+    "Conditions": [
+        {
+            "Name": "VisualCheck",
+            "Arguments": ["@true_situation"],
+            "Description": "Invoke a vision language model. This will return true if a vision system confirms that @true_situation is satisfied."
+        },
+        {
+            "Name": "GoalCheck",
+            "Arguments": ["@what_to_check", "@where_to_check"],
+            "Description": "DO NOT USE THIS. This is a placeholder for the ultimate goal check."
+        }
+    ]
+}

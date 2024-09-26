@@ -1,0 +1,16 @@
+[user]
+Information about environments is given as python dictionary. Example:
+"""
+"environment": {
+    "asset_object_relations": {
+        ...information about the asset_object relations...
+    },
+    "location_asset_relations": {
+        ...information about the location-asset relations...
+    }
+}
+"""
+-------------------------------------------------------
+The texts above are part of the overall instruction. Do not start working yet:
+[assistant]
+Understood. I will wait for further instructions before starting to work.

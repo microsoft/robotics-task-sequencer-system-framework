@@ -1,0 +1,103 @@
+[user]
+I will give you some examples of the input and the output you will generate. 
+Example 1:
+"""
+- Input:
+"environment": {
+    "asset_object_relations": {
+        "asset1": ["object1"]
+    },
+    "location_asset_relations": {
+        "area1": ["asset1"]
+    }
+}
+"instruction": "Get object1."
+- Output:
+```python
+{
+    "MAIN_SEQUENCE": 'action [GoTo, "area1"]
+                      action [PickUp, "object1", "asset1", "area1"]',
+    "ULTIMATE_GOAL": "Get Object1",
+    "WHERE_TO_CHECK_GOAL": "area1"
+}
+```
+"""
+Example 2:
+"""
+- Input:
+"instruction": "Do Action A if Condition C is met, otherwise Do ActionB "
+In such if-else case, the output should be like the following.
+- Output:
+```python
+{
+    "MAIN_SEQUENCE": 'selector {
+                            sequence {
+                                condition [VisualCheck, "condition C"]
+                                action [ActionA, "arg1", "arg2" "arg3"]
+                            }
+                            sequence {
+                                action [ActionB, "arg1"]
+                            }
+                        }',
+    "ULTIMATE_GOAL": "Visually check either A or B was completed",
+    "WHERE_TO_CHECK_GOAL":"location"
+}
+```
+"""
+When there is a conditional branch, make sure to include the else case even if it is not explicitly instructed (i.e., Action B in this case).
+Example 3:
+"""
+- Input:
+"instruction": "Do Action A, but do Action B before A if Condition is C "
+In such branching case, the output should be like the following.
+- Output:
+```python
+{
+    "MAIN_SEQUENCE": 'selector {
+                            sequence {
+                                condition [VisualCheck, "condition C"]
+                                action [ActionB, "arg1", "arg2" "arg3"]
+                                action [ActionA, "arg1"]
+                            }
+                            sequence {
+                                action [ActionA, "arg1"]
+                            }
+                        }',
+    "ULTIMATE_GOAL": "Visually check if A was completed",
+    "WHERE_TO_CHECK_GOAL":"location"
+}
+```
+"""
+Example 4:
+"""
+- Input:
+"instruction": "Do Action X then A then K, but do Action B before A if Condition is C after doing X. "
+In such branching case, the output should be like the following.
+- Output:
+```python
+{
+    "MAIN_SEQUENCE": 'sequence {
+                            action [ActionX, "arg1"]
+                            selector {
+                                sequence {
+                                    condition [VisualCheck, "condition C"]
+                                    action [ActionB, "arg1", "arg2" "arg3"]
+                                    action [ActionA, "arg1"]
+                                    action [ActionK, "arg1"]
+                                }
+                                sequence {
+                                    action [ActionA, "arg1"]
+                                    action [ActionK, "arg1"]
+                                }
+                             }
+                        }',
+    "ULTIMATE_GOAL": "Visually check if K was completed",
+    "WHERE_TO_CHECK_GOAL":"location"
+}
+```
+"""
+Note that Action X must be outside the selector as putting it inside the two child sequences will run "X then check C then X" instead of "X then check C then A" when C is false.
+-------------------------------------------------------
+The texts above are part of the overall instruction. Do not start working yet:
+[assistant]
+Waiting for next input.

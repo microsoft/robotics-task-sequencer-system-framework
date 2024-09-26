@@ -1,0 +1,16 @@
+{
+    "asset_object_relations": {
+        "table": ["cup", "cloth"],
+        "coffee_machine": ["coffee_button", "blend_button", "decaf_button"],
+        "trash_can": [],
+        "sink": [],
+        "oven": ["cookie_tray"]
+    },
+    "location_asset_relations": {
+        "table_area": ["table"],
+        "coffee_area": ["coffee_machine"],
+        "trash_area": ["trash_can"],
+        "sink_area": ["sink"],
+        "oven_area": ["oven"]
+    }
+}
