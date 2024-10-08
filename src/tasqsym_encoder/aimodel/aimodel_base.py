@@ -89,9 +89,10 @@ class AIModel(ABC):
             fp_prompt = os.path.join(self.dir_prompt, prompt_name + '.txt')
             with open(fp_prompt) as f:
                 data = f.read()
-                with open(self.action_definitions_file, 'r') as file:
-                    action_definitions = file.read()
-                data = data.replace('ACTION_DEFINITIONS_PLACEHOLDER', action_definitions)
+                if data.find('ACTION_DEFINITIONS_PLACEHOLDER') != -1:  # only enters for action prompt
+                    with open(self.action_definitions_file, 'r') as file:
+                        action_definitions = file.read()
+                    data = data.replace('ACTION_DEFINITIONS_PLACEHOLDER', action_definitions)
             data_split = re.split(r'\[user\]\n|\[assistant\]\n', data)
             data_split = [item for item in data_split if len(item) != 0]
             # messages start with "user" and ends with "system"
