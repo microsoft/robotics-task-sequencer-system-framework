@@ -39,7 +39,7 @@ def quaternion_slerp(q1: Quaternion, q2: Quaternion, t: float) -> Quaternion:
     s = np.sin((1-t)*omega)/np.sin(omega) * q1_n + np.sin(t*omega)/np.sin(omega) * q2_n
     return Quaternion(s[0], s[1], s[2], s[3])
 
-def quaternion_matrix(q: Quaternion):
+def quaternion_matrix(q: Quaternion) -> list[list[float]]:
     # First row of the rotation matrix
     r00 = 2 * (q[3] * q[3] + q[0] * q[0]) - 1
     r01 = 2 * (q[0] * q[1] - q[3] * q[2])
