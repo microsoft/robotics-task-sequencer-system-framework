@@ -15,30 +15,31 @@ class ConnectionSettings(TypedDict, total=False):
     MQTT_HOST_NAME: Required[str]
     MQTT_TCP_PORT: Required[int]
     MQTT_USE_TLS: Required[bool]
+    MQTT_TLS_INSECURE: Required[bool] # if True, no server cert validation is done
     MQTT_CLEAN_SESSION: Required[bool]
     MQTT_KEEP_ALIVE_IN_SECONDS: Required[int]
+    MQTT_CLIENT_AUTH: Required[str] # if set, must be 'cert' or 'password' or 'anonymous'
     MQTT_CLIENT_ID: str
     MQTT_USERNAME: str
     MQTT_PASSWORD_FILE: str
     MQTT_CA_FILE: str
     MQTT_CERT_FILE: str
     MQTT_KEY_FILE: str
-    MQTT_KEY_FILE_PASSWORD: str
 
 mqtt_setting_names: list[str] = [
     'MQTT_HOST_NAME',
     'MQTT_TCP_PORT',
     'MQTT_USE_TLS',
+    'MQTT_TLS_INSECURE',
     'MQTT_CLEAN_SESSION',
     'MQTT_KEEP_ALIVE_IN_SECONDS',
+    'MQTT_CLIENT_AUTH',
     'MQTT_CLIENT_ID',
     'MQTT_USERNAME',
     'MQTT_PASSWORD_FILE',
     'MQTT_CA_FILE',
     'MQTT_CERT_FILE',
-    'MQTT_KEY_FILE',
-    'MQTT_KEY_FILE_PASSWORD',
-    'MQTT_TLS_INSECURE'
+    'MQTT_KEY_FILE'
 ]
 
 def _convert_to_int(value: str, name: str) -> int:
@@ -62,12 +63,12 @@ def get_connection_settings(env_filename: str) -> ConnectionSettings:
     default_values = {
         'MQTT_TCP_PORT': '8883',
         'MQTT_USE_TLS': 'true',
+        'MQTT_TLS_INSECURE': 'false',
         'MQTT_CLEAN_SESSION': 'true',
         'MQTT_KEEP_ALIVE_IN_SECONDS': '30',
+        'MQTT_CLIENT_AUTH': 'password',
         'MQTT_CLIENT_ID': '',
-        'MQTT_KEY_FILE_PASSWORD': '',
-        'MQTT_CLIENT_ID': '',
-        'MQTT_TLS_INSECURE': 'false',
+        'MQTT_CA_FILE': None,
         'MQTT_PASSWORD_FILE': None
     }
 
@@ -75,8 +76,10 @@ def get_connection_settings(env_filename: str) -> ConnectionSettings:
 
     if 'MQTT_HOST_NAME' not in final_values:
         raise ValueError('MQTT_HOST_NAME must be set')
-    if 'MQTT_PASSWORD_FILE' in final_values and 'MQTT_USERNAME' not in final_values:
+    if final_values['MQTT_CLIENT_AUTH'] == 'password' and ('MQTT_PASSWORD_FILE' not in final_values or 'MQTT_USERNAME' not in final_values):
         raise ValueError('MQTT_USERNAME must be set if MQTT_PASSWORD_FILE is set')
+    if final_values['MQTT_CLIENT_AUTH'] == 'cert' and ('MQTT_CERT_FILE' not in final_values or 'MQTT_KEY_FILE' not in final_values):
+        raise ValueError('Client certificate and key files must be set if MQTT_CLIENT_AUTH is cert')
     if 'MQTT_TCP_PORT' in final_values:
         final_values['MQTT_TCP_PORT'] = _convert_to_int(final_values['MQTT_TCP_PORT'], 'MQTT_TCP_PORT')
     if 'MQTT_USE_TLS' in final_values:
@@ -97,30 +100,26 @@ def create_mqtt_client(connection_settings: ConnectionSettings):
         protocol=mqtt.MQTTv311,
         transport="tcp",
     )
-    if connection_settings['MQTT_PASSWORD_FILE'] is not None:
-      with open(connection_settings['MQTT_PASSWORD_FILE'], 'r') as f:
-        mqtt_password = f.read()
-    else:
-        mqtt_password = None
-    mqtt_client.username_pw_set(connection_settings['MQTT_USERNAME'], mqtt_password)
-    if connection_settings['MQTT_TLS_INSECURE']:
-    # server is a self-signed cert, and no client cert auth
+    context = None
+    if connection_settings['MQTT_USE_TLS']:
         context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-        context.load_verify_locations(cafile=connection_settings['MQTT_CA_FILE'])
-        # context.verify_mode = ssl.CERT_NONE # either this or provide a CA cert 
-        # context.check_hostname = False  # same as tls_insecure_set(True)
-        mqtt_client.tls_set_context(context)
-        mqtt_client.tls_insecure_set(True)
-    else:
-    # server is a CA-signed cert, and client cert auth
-        context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-        context.minimum_version = ssl.TLSVersion.TLSv1_2
-        context.maximum_version = ssl.TLSVersion.TLSv1_3
+        if connection_settings['MQTT_CA_FILE'] is not None:
+            context.load_verify_locations(cafile=connection_settings['MQTT_CA_FILE'])
+        else:
+            context.load_default_certs()
+
+    mqtt_password = None
+    if connection_settings['MQTT_CLIENT_AUTH'] == 'password':
+        with open(connection_settings['MQTT_PASSWORD_FILE'], 'r') as f:
+            mqtt_password = f.read()
+    elif connection_settings['MQTT_CLIENT_AUTH'] == 'cert':
         context.load_cert_chain(
             certfile=connection_settings['MQTT_CERT_FILE'],
             keyfile=connection_settings['MQTT_KEY_FILE']
         )
-        context.load_default_certs()
+    mqtt_client.username_pw_set(connection_settings['MQTT_USERNAME'], mqtt_password)
+    if context is not None:
         mqtt_client.tls_set_context(context)
+        mqtt_client.tls_insecure_set(connection_settings['MQTT_TLS_INSECURE'])
 
     return mqtt_client
