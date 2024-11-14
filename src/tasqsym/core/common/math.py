@@ -39,6 +39,24 @@ def quaternion_slerp(q1: Quaternion, q2: Quaternion, t: float) -> Quaternion:
     s = np.sin((1-t)*omega)/np.sin(omega) * q1_n + np.sin(t*omega)/np.sin(omega) * q2_n
     return Quaternion(s[0], s[1], s[2], s[3])
 
+def quaternion_matrix(q: Quaternion) -> list[list[float]]:
+    # First row of the rotation matrix
+    r00 = 2 * (q[3] * q[3] + q[0] * q[0]) - 1
+    r01 = 2 * (q[0] * q[1] - q[3] * q[2])
+    r02 = 2 * (q[0] * q[2] + q[3] * q[1])
+
+    # Second row of the rotation matrix
+    r10 = 2 * (q[0] * q[1] + q[3] * q[2])
+    r11 = 2 * (q[3] * q[3] + q[1] * q[1]) - 1
+    r12 = 2 * (q[1] * q[2] - q[3] * q[0])
+
+    # Third row of the rotation matrix
+    r20 = 2 * (q[0] * q[2] - q[3] * q[1])
+    r21 = 2 * (q[1] * q[2] + q[3] * q[0])
+    r22 = 2 * (q[3] * q[3] + q[2] * q[2]) - 1
+
+    return [[r00, r01, r02], [r10, r11, r12], [r20, r21, r22]]
+
 """Below not used in the sample codes but for convenience."""
 def quaternion_from_euler(x: float, y: float, z: float) -> Quaternion:
     cx = np.cos(x*.5)
@@ -53,18 +71,22 @@ def quaternion_from_euler(x: float, y: float, z: float) -> Quaternion:
                       cx*cy*cz + sx*sy*sz)
 
 """Below not used in the sample codes but for convenience."""
-def euler_from_quaternion(q: Quaternion) -> tuple[float, float, float]:
-    x, y, z, w = q
-    sinx_cosy = 2*(w*x + y*z)
-    cosx_cosy = 1 - 2*(x*x + y*y)
-    siny = np.sqrt(1 + 2*(w*y - x*z))
-    cosy = np.sqrt(1 - 2*(w*y - x*z))
-    sinz_cosy = 2*(w*z + x*y)
-    cosz_cosy = 1 - 2*(y*y + z*z)
-    return (np.arctan2(sinx_cosy, cosx_cosy),
-            2*np.arctan2(siny, cosy) - np.pi*.5,
-            np.arctan2(sinz_cosy, cosz_cosy))
+def euler_from_matrix(m: list[list[float]]) -> tuple[float, float, float]:
+    _EPS = np.finfo(float).eps * 4.0
 
+    cy = np.sqrt(m[0][0]*m[0][0] + m[1][0]*m[1][0])
+    if cy > _EPS:
+        ax = np.arctan2( m[2][1], m[2][2])
+        ay = np.arctan2(-m[2][0], cy)
+        az = np.arctan2( m[1][0], m[0][0])
+    else:
+        ax = np.arctan2(-m[1][2], m[1][1])
+        ay = np.arctan2(-m[2][0],  cy)
+        az = 0.0
+    return ax, ay, az
+
+def euler_from_quaternion(q: Quaternion) -> tuple[float, float, float]:
+    return euler_from_matrix(quaternion_matrix(q))
 
 """
 Directions to angles.
