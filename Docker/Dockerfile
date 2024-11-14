@@ -21,6 +21,7 @@ RUN touch /tsscore/src/tasqsym_samples/__init__.py
 ADD ./src/tasqsym_samples/sim_robot_sample_settings.json /tsscore/src/tasqsym_samples/sim_robot_sample_settings.json
 ADD ./src/tasqsym_samples/generated_sequence_samples /tsscore/src/tasqsym_samples/generated_sequence_samples
 ADD ./src/tasqsym_samples/robot_adapter_samples /tsscore/src/tasqsym_samples/robot_adapter_samples
+ADD ./src/tasqsym_samples/sensor_adapter_samples /tsscore/src/tasqsym_samples/sensor_adapter_samples
 
 RUN pip install .
 
